@@ -1,17 +1,31 @@
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: site
+  name: nginx
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: site
+      app: nginx
   template:
     metadata:
       labels:
-        app: site
+        app: nginx
     spec:
       containers:
-        - name: site
-          image: 211125773797.dkr.ecr.ap-south-1.amazonaws.com/my-ecr-repo/image:$TAG
+        - name: nginx
+          image: 211125773797.dkr.ecr.ap-south-1.amazonaws.com/my-ecr-repo:58cde6718b155cb231815094112ec868b33b5896
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
